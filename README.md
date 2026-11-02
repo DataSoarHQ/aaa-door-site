@@ -11,7 +11,7 @@ npm run build   # output in dist/
 
 ## Editing content
 
-Business facts, services, towns, team, reviews and FAQs are all in `src/data/site.ts`. Photos are listed in `src/data/photos.ts`.
+Business facts, services, team, reviews and FAQs are in `src/data/site.ts`. Each service area and its page text is in `src/data/areas.ts`, and adding an entry there creates the page. Photos are listed in `src/data/photos.ts`.
 
 ## SEO and metadata
 

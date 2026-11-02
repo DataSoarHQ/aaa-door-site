@@ -147,6 +147,7 @@ p { margin: 0; }
 .towns__list li { padding-block: .28rem; break-inside: avoid; }
 .towns__list li[hidden] { display: none; }
 .towns__list li.is-hit { font-weight: 800; }
+.towns__list a { text-underline-offset: .2em; }
 .section--dark .towns__answer, .section--dark .towns__list li.is-hit { color: var(--sky); }
 .section--dark .towns input { border-color: var(--white); }
 .section--dark .towns__list { color: #dbe4ec; }
@@ -163,6 +164,10 @@ p { margin: 0; }
 .team--row li, .team--row li:first-child { border-block: 0; border-top: 4px solid var(--red); padding-top: .9rem; }
 
 /* Service tiles copy the raised, stamped panel of a garage door. */
+.area-note { margin-top: 1rem; max-width: 38rem; }
+.area-quote { margin: 1.25rem 0 .75rem; font-size: 1.35rem; line-height: 1.4; }
+.area-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: .6rem 2rem; margin-top: 1.5rem; }
+.area-all { margin-top: 1.5rem; }
 .section-title { margin-bottom: 1.75rem; }
 .stamps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; padding: .5rem; background: #cbd8e3; }
 .stamp { padding: 1.5rem 1.5rem 1.65rem; background: var(--white); outline: 1px solid var(--line); outline-offset: -.5rem; }

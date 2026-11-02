@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
-import { business as b, commercial, faqs, nav, residential, team, towns } from '../data/site';
+import { areaHref, areas } from '../data/areas';
+import { business as b, commercial, faqs, nav, residential, team } from '../data/site';
 
 // A plain-text summary of the business for AI assistants and text-only readers.
 const list = (items: string[]) => items.map((item) => `- ${item}`).join('\n');
@@ -30,8 +31,7 @@ ${list(commercial.map((s) => `${s.name}: ${s.text}`))}
 
 ## Service areas
 
-Texas: ${towns.TX.join(', ')}
-Louisiana: ${towns.LA.join(', ')}
+${list(areas.map((a) => `[${a.name}, ${a.state}](${b.url}${areaHref(a)}), ${a.county}`))}
 
 ## Team
 

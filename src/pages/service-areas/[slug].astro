@@ -1,0 +1,86 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import Reviews from '../../components/Reviews.astro';
+import { areas, areaHref, areaSlug, regionNotes } from '../../data/areas';
+import { business as b, residential, commercial } from '../../data/site';
+import { styles } from '../../data/photos';
+
+export function getStaticPaths() {
+  return areas.map((area, index) => ({ params: { slug: areaSlug(area) }, props: { area, index } }));
+}
+
+const { area, index } = Astro.props;
+const place = `${area.name}, ${area.state}`;
+const photo = styles[index % styles.length];
+const nearby = area.nearby.map((name) => areas.find((a) => a.name === name));
+const areaServed = { '@type': 'City', name: place };
+const services = [
+  { name: `Residential garage door repair and installation in ${place}`, text: `Spring, opener and garage door repair and replacement for homes in ${place}.`, areaServed },
+  { name: `Commercial door service in ${place}`, text: `Roll-up and sectional doors, motor operators and door hardware for businesses in ${place}.`, areaServed },
+];
+---
+<Base
+  title={`Garage Door Repair in ${place}`}
+  crumb={place}
+  parents={[{ name: 'Service areas', href: '/service-areas/' }]}
+  services={services}
+  description={`Garage door repair and installation in ${place} (${area.county}). Springs, openers, new doors and 24/7 emergency service. Call ${b.phoneDisplay}.`}
+>
+  <PageHead title={`Garage door repair in ${place}`} lead={`Home and commercial door service in ${area.county}, with free quotes and 24/7 emergency calls.`}>
+    <div class="actions">
+      <a class="btn btn--white" href={b.phoneHref}>Call {b.phoneDisplay}</a>
+      <a class="btn btn--outline" href="/contact-us/">Get a free quote</a>
+    </div>
+  </PageHead>
+
+  <section class="section">
+    <div class="wrap feature">
+      <div>
+        <h2>AAA Door in {area.name}</h2>
+        <p class="lede">{area.intro}</p>
+        <p class="area-note">{regionNotes[area.region]}</p>
+      </div>
+      <Image src={photo.src} alt={photo.alt} widths={[500, 950].filter((w) => w <= photo.src.width)} sizes="(max-width: 900px) 100vw, 50vw" />
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <h2>Door services in {area.name}</h2>
+      <div class="split">
+        <div class="split__col">
+          <h3>For your home</h3>
+          <ul class="ticks">{residential.slice(0, 7).map((s) => <li>{s.name}</li>)}</ul>
+          <a class="btn btn--dark" href="/residential/">See residential services</a>
+        </div>
+        <div class="split__col">
+          <h3>For your business</h3>
+          <ul class="ticks">{commercial.slice(0, 7).map((s) => <li>{s.name}</li>)}</ul>
+          <a class="btn btn--dark" href="/commercial/">See commercial services</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {area.review ? (
+    <section class="section">
+      <div class="wrap wrap--narrow">
+        <h2>What a neighbor in {area.name} said</h2>
+        <blockquote class="area-quote">{area.review.quote}</blockquote>
+        <p class="who">{area.review.who}</p>
+      </div>
+    </section>
+  ) : <Reviews />}
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Also serving nearby</h2>
+      <ul class="area-links">
+        {nearby.map((a) => <li><a class="link" href={areaHref(a)}>Garage door repair in {a.name}, {a.state}</a></li>)}
+      </ul>
+      <p class="area-all"><a class="link" href="/service-areas/">See all service areas</a></p>
+    </div>
+  </section>
+</Base>

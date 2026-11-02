@@ -1,4 +1,6 @@
 // All business facts live here. Update this file and every page follows.
+import { areas } from './areas';
+
 export const business = {
   name: 'AAA Door',
   legalName: 'AAA Door LLC',
@@ -31,8 +33,8 @@ export const nav = [
 ];
 
 export const towns = {
-  TX: ['Orange', 'Beaumont', 'Nederland', 'Bridge City', 'Port Neches', 'Lumberton', 'Port Arthur', 'Groves', 'Silsbee', 'Winnie', 'Sour Lake', 'Kountze', 'Deweyville', 'Buna', 'Evadale', 'Jasper', 'Fannett', 'Hampshire'],
-  LA: ['Vinton', 'Sulphur', 'Starks'],
+  TX: areas.filter((a) => a.state === 'TX').map((a) => a.name),
+  LA: areas.filter((a) => a.state === 'LA').map((a) => a.name),
 };
 
 export const residential = [

@@ -1,14 +1,14 @@
 ---
-import { business as b, towns } from '../data/site';
+import { business as b } from '../data/site';
+import { areas, areaHref } from '../data/areas';
 const { heading: H = 'h2' } = Astro.props;
-const all = [...towns.TX.map((t) => [t, 'TX']), ...towns.LA.map((t) => [t, 'LA'])];
 ---
 <div class="towns" data-towns>
   <H class="towns__q"><label for="town">Do we come to your town?</label></H>
   <input id="town" type="text" autocomplete="address-level2" placeholder="Type your town" data-town-input />
-  <p class="towns__answer" role="status" data-town-answer>We serve 21 towns across Southeast Texas and Southwest Louisiana.</p>
+  <p class="towns__answer" role="status" data-town-answer>We serve {areas.length} towns across Southeast Texas and Southwest Louisiana.</p>
   <ul class="towns__list" data-town-list>
-    {all.map(([t, s]) => <li data-town={t.toLowerCase()}>{t}, {s}</li>)}
+    {areas.map((a) => <li data-town={a.name.toLowerCase()}><a href={areaHref(a)}>{a.name}, {a.state}</a></li>)}
   </ul>
 </div>
 <script is:inline define:vars={{ phone: b.phoneDisplay }}>
