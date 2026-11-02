@@ -1,10 +1,10 @@
-// Emails quote requests through Resend. Set RESEND_API_KEY, QUOTE_TO_EMAIL and QUOTE_FROM_EMAIL in Vercel.
+// Validates a quote request and emails it to the company through Resend.
 const json = (body, status) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 
 const clean = (value, max) => String(value ?? '').replace(/\s+/g, ' ').trim().slice(0, max);
 
-export async function POST(request) {
+export async function handleQuote(request, { key, to, from }) {
   let data;
   try {
     data = await request.json();
@@ -27,7 +27,6 @@ export async function POST(request) {
   if (phone.replace(/\D/g, '').length < 10) return json({ error: 'Enter a 10-digit phone number so we can reach you.' }, 400);
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: 'Check the email address, or leave it blank.' }, 400);
 
-  const { RESEND_API_KEY: key, QUOTE_TO_EMAIL: to, QUOTE_FROM_EMAIL: from } = process.env;
   if (!key || !to || !from) {
     console.error('Quote form is not configured: missing email environment variables.');
     return json({ error: 'not_configured' }, 503);

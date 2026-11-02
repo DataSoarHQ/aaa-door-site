@@ -1,9 +1,11 @@
 import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { POST } from '../api/quote.js';
+import { handleQuote } from '../src/lib/quote.js';
 
 const req = (body) => new Request('http://x/api/quote', { method: 'POST', body: typeof body === 'string' ? body : JSON.stringify(body) });
 const good = { name: 'Pat Lee', phone: '(409) 555-0100', type: 'Garage door repair', message: 'Spring\nbroke' };
+const env = { key: 'k', to: 'a@x.com, b@x.com', from: 'site@x.com' };
+const POST = (request, config = env) => handleQuote(request, config);
 const realFetch = globalThis.fetch;
 const realError = console.error;
 let sent;
@@ -11,9 +13,6 @@ let sent;
 beforeEach(() => {
   sent = [];
   console.error = () => {};
-  process.env.RESEND_API_KEY = 'k';
-  process.env.QUOTE_TO_EMAIL = 'a@x.com, b@x.com';
-  process.env.QUOTE_FROM_EMAIL = 'site@x.com';
   globalThis.fetch = async (url, init) => { sent.push({ url, body: JSON.parse(init.body) }); return new Response('{}', { status: 200 }); };
 });
 afterEach(() => { globalThis.fetch = realFetch; console.error = realError; });
@@ -45,8 +44,9 @@ test('strips line breaks from the subject', async () => {
 });
 
 test('reports failure when email is not configured', async () => {
-  delete process.env.RESEND_API_KEY;
-  assert.equal((await POST(req(good))).status, 503);
+  for (const missing of ['key', 'to', 'from']) {
+    assert.equal((await POST(req(good), { ...env, [missing]: undefined })).status, 503);
+  }
   assert.equal(sent.length, 0);
 });
 
