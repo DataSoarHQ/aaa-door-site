@@ -1,0 +1,27 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Services from '../components/Services.astro';
+import { business as b, residential } from '../data/site';
+import { styles } from '../data/photos';
+---
+<Base title="Residential Garage Door Repair & Installation" description="Spring repairs, openers, new garage doors, wind load and full-view glass doors, plus interior and exterior doors. Serving Orange, Beaumont and nearby towns. Call 409-344-4505.">
+  <PageHead title="Garage doors and more for your home" lead="From a snapped spring on a Sunday night to a brand new door for the front of your house." />
+  <section class="section">
+    <div class="wrap"><Services items={residential} /></div>
+  </section>
+  <section class="section section--tint">
+    <div class="wrap feature">
+      <Image src={styles[0].src} alt={styles[0].alt} widths={[500, 950]} sizes="(max-width: 900px) 100vw, 50vw" />
+      <div>
+        <h2>Choosing a new door?</h2>
+        <p class="lede">We’ll come out, measure and walk you through your options, with a written quote for free. Living near the Gulf? Ask us about wind-rated doors, since not every style comes wind-rated.</p>
+        <div class="actions">
+          <a class="btn btn--red" href="/contact-us/">Get a free quote</a>
+          <a class="btn btn--ghost" href="/gallery/">Browse door styles</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Services from '../components/Services.astro';
+import { business as b, commercial } from '../data/site';
+---
+<Base title="Commercial Door Service & Installation" description="Commercial roll-up and sectional doors, motor operators, hollow metal doors, closers, panic hardware and keyed entry for businesses in Southeast Texas and Southwest Louisiana.">
+  <PageHead title="Keep your business doors working" lead="Overhead doors, entries and exits, serviced by a local crew that answers emergency calls 24/7." />
+  <section class="section">
+    <div class="wrap"><Services items={commercial} /></div>
+  </section>
+  <section class="section section--tint">
+    <div class="wrap feature feature--text">
+      <div>
+        <h2>Fix problems before they shut you down</h2>
+        <p class="lede">An annual or bi-annual maintenance contract puts your doors on a regular schedule, so we find worn parts on a planned visit and not on your busiest day.</p>
+      </div>
+      <div class="actions">
+        <a class="btn btn--red" href="/contact-us/">Ask about a contract</a>
+        <a class="btn btn--ghost" href={b.phoneHref}>Call {b.phoneDisplay}</a>
+      </div>
+    </div>
+  </section>
+</Base>

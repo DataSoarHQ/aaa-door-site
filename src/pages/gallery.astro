@@ -1,0 +1,46 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { jobs, styles } from '../data/photos';
+const large = async (list) =>
+  Promise.all(list.map(async (p) => ({ ...p, full: (await getImage({ src: p.src, width: Math.min(1600, p.src.width), format: 'webp' })).src })));
+const groups = [
+  { title: 'From the job site', photos: await large(jobs) },
+  { title: 'Door styles to consider', photos: await large(styles) },
+];
+---
+<Base title="Gallery" description="Garage door photos and door styles from AAA Door, including carriage, modern, wood-look and full-view glass doors.">
+  <PageHead title="Gallery" lead="A look at recent work and door styles we can install. Select a photo to see it larger." />
+  {groups.map((g) => (
+    <section class="section section--tight">
+      <div class="wrap">
+        <h2>{g.title}</h2>
+        <ul class:list={['grid-photos', { 'grid-photos--four': g.photos.length === 4 }]}>
+          {g.photos.map((p) => (
+            <li>
+              <button type="button" data-full={p.full} data-alt={p.alt} aria-label={`View larger: ${p.alt}`}>
+                <Image class:list={{ 'is-contain': p.contain }} src={p.src} alt="" widths={[400, 800].filter((w) => w <= p.src.width)} sizes="(max-width: 700px) 100vw, 33vw" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  ))}
+  <dialog class="lightbox" data-lightbox aria-label="Photo">
+    <form method="dialog"><button class="btn btn--white">Close</button></form>
+    <img alt="" data-lightbox-img />
+  </dialog>
+  <script is:inline>
+    (function () {
+      var d = document.querySelector('[data-lightbox]');
+      var img = d.querySelector('[data-lightbox-img]');
+      document.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-full]');
+        if (b) { img.src = b.dataset.full; img.alt = b.dataset.alt; d.showModal(); }
+        else if (e.target === d) d.close();
+      });
+    })();
+  </script>
+</Base>

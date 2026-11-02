@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { faqs } from '../data/site';
+const schema = {
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+<Base title="Frequently Asked Questions" description="Answers about free quotes, 24/7 emergency service, insurance paperwork, scheduling, openers, maintenance and wind-rated garage doors.">
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(schema)} />
+  <PageHead title="Frequently asked questions" lead="Can’t find your answer? Call 409-344-4505." />
+  <section class="section">
+    <div class="wrap wrap--narrow accordion">
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <div class="accordion__body"><p>{f.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </section>
+</Base>

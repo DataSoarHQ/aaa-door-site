@@ -1,0 +1,21 @@
+---
+import { business as b, reviews } from '../data/site';
+---
+<section class="section reviews">
+  <div class="wrap reviews__grid">
+    <div class="reviews__score">
+      <p class="score">{b.rating}</p>
+      <p class="stars" aria-hidden="true">★★★★★</p>
+      <p>From {b.reviewCount} reviews across Google, BBB and Facebook.</p>
+      <a class="link" href={b.reviewsUrl} rel="noopener">Read the reviews</a>
+    </div>
+    <ul class="reviews__list" tabindex="0" aria-label="Customer reviews">
+      {reviews.map((r) => (
+        <li>
+          <blockquote>{r.quote}</blockquote>
+          <p class="who">{r.who}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

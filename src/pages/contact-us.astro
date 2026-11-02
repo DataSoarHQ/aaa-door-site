@@ -1,0 +1,80 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { business as b } from '../data/site';
+const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${b.legalName}, ${b.street}, ${b.city}, ${b.region} ${b.zip}`)}`;
+---
+<Base title="Contact Us & Free Quotes" description="Call AAA Door at 409-344-4505 or request a free quote online. 24/7 emergency garage door service from Orange, TX.">
+  <PageHead title="Get a free quote" lead="Emergency? Please call so we can help right away." />
+  <section class="section">
+    <div class="wrap contact">
+      <form class="form" data-quote-form novalidate>
+        <div class="field"><label for="name">Your name</label><input id="name" name="name" required autocomplete="name" maxlength="120" /></div>
+        <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" required autocomplete="tel" maxlength="30" /></div>
+        <div class="field"><label for="email">Email (optional)</label><input id="email" name="email" type="email" autocomplete="email" maxlength="200" /></div>
+        <div class="field"><label for="town">Town</label><input id="town" name="town" autocomplete="address-level2" maxlength="120" /></div>
+        <div class="field field--full">
+          <label for="type">What do you need?</label>
+          <select id="type" name="type">
+            <option>Garage door repair</option>
+            <option>New garage door</option>
+            <option>Spring or opener problem</option>
+            <option>Interior or exterior door</option>
+            <option>Commercial door service</option>
+            <option>Maintenance contract</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="field field--full"><label for="message">Tell us what’s going on</label><textarea id="message" name="message" rows="5" maxlength="4000"></textarea></div>
+        <div class="hp" aria-hidden="true"><label for="company">Leave this empty</label><input id="company" name="company" tabindex="-1" autocomplete="off" /></div>
+        <div class="field--full">
+          <button class="btn btn--red btn--lg" type="submit">Send my request</button>
+          <p class="form__status" role="status" data-quote-status></p>
+        </div>
+      </form>
+      <aside class="contact__side">
+        <h2>Prefer to call?</h2>
+        <p><a class="contact__phone" href={b.phoneHref}>{b.phoneDisplay}</a></p>
+        <h3>Hours</h3>
+        <p>Monday to Friday, 7:00 AM to 5:00 PM. Closed weekends and major holidays, with emergency service available 24/7.</p>
+        <h3>Office</h3>
+        <address>{b.legalName}<br />{b.street}<br />{b.city}, {b.region} {b.zip}</address>
+        <p><a class="link" href={maps} rel="noopener">Get directions</a></p>
+      </aside>
+    </div>
+  </section>
+  <script is:inline define:vars={{ phone: b.phoneDisplay }}>
+    (function () {
+      var form = document.querySelector('[data-quote-form]');
+      var status = form.querySelector('[data-quote-status]');
+      var button = form.querySelector('button[type=submit]');
+      var fallback = 'Your request wasn’t sent. Please call ' + phone + ' and we’ll take it from there.';
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        status.className = 'form__status';
+        var data = Object.fromEntries(new FormData(form));
+        if (!data.name.trim() || data.phone.replace(/\D/g, '').length < 10) {
+          status.textContent = 'Enter your name and a 10-digit phone number so we can reach you.';
+          status.classList.add('is-error');
+          return;
+        }
+        button.disabled = true;
+        status.textContent = 'Sending your request';
+        fetch('/api/quote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+          .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, code: r.status, j: j }; }); })
+          .then(function (res) {
+            if (res.ok) {
+              form.reset();
+              status.textContent = 'Request sent. We’ll contact you at the number you gave us.';
+              status.classList.add('is-ok');
+            } else {
+              status.textContent = res.code === 400 && res.j.error ? res.j.error : fallback;
+              status.classList.add('is-error');
+            }
+          })
+          .catch(function () { status.textContent = fallback; status.classList.add('is-error'); })
+          .finally(function () { button.disabled = false; });
+      });
+    })();
+  </script>
+</Base>

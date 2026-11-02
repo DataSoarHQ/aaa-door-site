@@ -1,0 +1,11 @@
+---
+const { items } = Astro.props;
+---
+<ul class="stamps">
+  {items.map((s) => (
+    <li class="stamp">
+      <h3>{s.name}</h3>
+      <p>{s.text}</p>
+    </li>
+  ))}
+</ul>

@@ -1,0 +1,123 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+import Reviews from '../components/Reviews.astro';
+import TownChecker from '../components/TownChecker.astro';
+import { business as b, residential, commercial, team } from '../data/site';
+import { jobs, styles } from '../data/photos';
+
+const trouble = [
+  { q: 'A spring or cable snapped', a: 'A loud bang followed by a door that feels too heavy usually means a broken spring. Leave the door where it is and don’t pull on it. Springs and cables hold serious tension and can hurt you.' },
+  { q: 'The door won’t open or close', a: 'If your car is stuck inside or the door won’t shut, call us. Emergency service runs 24/7, so you don’t have to wait for Monday morning.' },
+  { q: 'The opener stopped working', a: 'First check that it has power and that nothing is blocking the safety sensors near the floor. If it still won’t run, we can repair the motor operator or replace it.' },
+  { q: 'The door is off track or got hit', a: 'Stop using it and keep people and cars clear, because a door off its track can fall. We’ll fix the track, rollers and panels, or replace the door if it’s past saving.' },
+  { q: 'My business door is down', a: 'We handle roll-up and sectional doors, motor operators, door closers, panic hardware and hollow metal doors, day or night.' },
+  { q: 'I just want a new door', a: 'Good timing to look around. Browse door styles in the gallery, then ask for a free quote and we’ll come out to measure and go over your options.' },
+];
+---
+<Base title="AAA Door | Garage Door Repair & Installation in Orange, TX" description="Garage door repair and installation for homes and businesses in Orange, Beaumont, Port Arthur and across Southeast Texas and Southwest Louisiana. 24/7 emergency service. Call 409-344-4505.">
+  <script is:inline slot="head">
+    try { if (sessionStorage.getItem('aaaDoor')) document.documentElement.classList.add('door-seen'); sessionStorage.setItem('aaaDoor', '1'); } catch (e) {}
+  </script>
+
+  <section class="hero">
+    <div class="hero__copy">
+      <h1>Garage door stuck? We’ll get it moving.</h1>
+      <p class="hero__lead">Repairs, new doors and motor operators for homes and businesses across Southeast Texas and Southwest Louisiana. Based in Orange, on call 24/7 for emergencies.</p>
+      <div class="actions">
+        <a class="btn btn--red btn--lg" href={b.phoneHref}>Call {b.phoneDisplay}</a>
+        <a class="btn btn--ghost btn--lg" href="/contact-us/">Get a free quote</a>
+      </div>
+    </div>
+    <div class="hero__photo">
+      <Image src={jobs[0].src} alt={jobs[0].alt} widths={[640, 960, 1400]} sizes="(max-width: 900px) 100vw, 55vw" loading="eager" fetchpriority="high" />
+    </div>
+    <div class="curtain" aria-hidden="true">
+      <div class="curtain__panel"></div>
+      <div class="curtain__panel curtain__panel--windows"></div>
+      <div class="curtain__panel"></div>
+      <div class="curtain__panel"></div>
+      <div class="curtain__panel"></div>
+      <Logo class="curtain__logo" />
+    </div>
+  </section>
+
+  <ul class="proof wrap" aria-label="Why customers choose us">
+    <li><strong>{b.rating} stars</strong><span>{b.reviewCount} customer reviews</span></li>
+    <li><strong>A+ with BBB</strong><span>Accredited since 2018</span></li>
+    <li><strong>24/7</strong><span>Emergency service</span></li>
+    <li><strong>Since {b.since}</strong><span>Family owned in Orange, TX</span></li>
+  </ul>
+
+  <section class="section trouble">
+    <div class="wrap trouble__grid">
+      <div>
+        <h2>What’s your door doing?</h2>
+        <p class="lede">Pick what’s closest and we’ll tell you what to do next.</p>
+      </div>
+      <div class="accordion">
+        {trouble.map((t, i) => (
+          <details name="trouble" open={i === 0}>
+            <summary>{t.q}</summary>
+            <div class="accordion__body">
+              <p>{t.a}</p>
+              <p class="accordion__cta"><a class="link" href={b.phoneHref}>Call {b.phoneDisplay}</a></p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Homes and businesses, big doors and small</h2>
+      <div class="split">
+        <div class="split__col">
+          <h3>For your home</h3>
+          <ul class="ticks">{residential.slice(0, 7).map((s) => <li>{s.name}</li>)}</ul>
+          <a class="btn btn--dark" href="/residential/">See residential services</a>
+        </div>
+        <div class="split__col">
+          <h3>For your business</h3>
+          <ul class="ticks">{commercial.slice(0, 7).map((s) => <li>{s.name}</li>)}</ul>
+          <a class="btn btn--dark" href="/commercial/">See commercial services</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Reviews />
+
+  <section class="section">
+    <div class="wrap">
+      <div class="heading-row">
+        <h2>Doors we install</h2>
+        <a class="link" href="/gallery/">See the full gallery</a>
+      </div>
+      <div class="strip">
+        {[styles[0], styles[1], styles[2], styles[3]].map((p) => (
+          <a href="/gallery/"><Image src={p.src} alt={p.alt} widths={[400, 700]} sizes="(max-width: 700px) 80vw, 25vw" /></a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="wrap"><TownChecker /></div>
+  </section>
+
+  <section class="section">
+    <div class="wrap about-teaser">
+      <div>
+        <h2>A small, family-run crew</h2>
+        <p class="lede">AAA Door is family owned and operated. We’d rather have your business for good than just this once, so we explain what’s wrong, give you the price in writing and stand behind the work.</p>
+        <a class="link" href="/about-us/">Meet the team</a>
+      </div>
+      <ul class="team">
+        {team.map((t) => <li><strong>{t.name}</strong><span>{t.role}</span></li>)}
+      </ul>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,139 @@
+---
+import '@fontsource-variable/archivo/wdth.css';
+import '../styles/global.css';
+import Logo from '../components/Logo.astro';
+import { business as b, nav, towns } from '../data/site';
+
+const { title, description } = Astro.props;
+const path = Astro.url.pathname;
+const canonical = new URL(path, b.url).href;
+const pageTitle = path === '/' ? title : `${title} | ${b.name}`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'HomeAndConstructionBusiness',
+  name: b.legalName,
+  url: b.url,
+  telephone: '+14093444505',
+  image: `${b.url}/og.jpg`,
+  address: { '@type': 'PostalAddress', streetAddress: b.street, addressLocality: b.city, addressRegion: b.region, postalCode: b.zip, addressCountry: 'US' },
+  openingHoursSpecification: { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '07:00', closes: '17:00' },
+  areaServed: [...towns.TX.map((t) => `${t}, TX`), ...towns.LA.map((t) => `${t}, LA`)],
+  sameAs: Object.values(b.social),
+};
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#14171B" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={b.legalName} />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={`${b.url}/og.jpg`} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <slot name="head" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="topbar">
+    <div class="wrap topbar__in">
+      <p class="status" data-status>Mon to Fri, 7:00 AM to 5:00 PM</p>
+      <p class="topbar__emergency">24/7 emergency service: <a href={b.phoneHref}>{b.phoneDisplay}</a></p>
+    </div>
+  </div>
+  <header class="header">
+    <div class="wrap header__in">
+      <a class="brand" href="/" aria-label={`${b.name} home`}>
+        <Logo class="brand__mark" />
+        <span class="brand__word">AAA Door</span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        {nav.map((n) => <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>)}
+      </nav>
+      <div class="header__cta">
+        <a class="btn btn--ghost" href="/contact-us/">Get a free quote</a>
+        <a class="btn btn--red" href={b.phoneHref}>Call {b.phoneDisplay}</a>
+      </div>
+      <details class="menu">
+        <summary>Menu</summary>
+        <nav aria-label="Mobile">
+          {nav.map((n) => <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>)}
+          <a href="/contact-us/">Contact</a>
+        </nav>
+      </details>
+    </div>
+  </header>
+
+  <main id="main"><slot /></main>
+
+  <section class="closer">
+    <div class="wrap closer__in">
+      <h2>Door trouble? Talk to someone local.</h2>
+      <div class="actions">
+        <a class="btn btn--white" href={b.phoneHref}>Call {b.phoneDisplay}</a>
+        <a class="btn btn--outline" href="/contact-us/">Get a free quote</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap footer__grid">
+      <div>
+        <a class="brand brand--light" href="/" aria-label={`${b.name} home`}>
+          <Logo class="brand__mark" />
+          <span class="brand__word">AAA Door</span>
+        </a>
+        <address>{b.street}<br />{b.city}, {b.region} {b.zip}</address>
+        <p><a href={b.phoneHref}>{b.phoneDisplay}</a></p>
+      </div>
+      <div>
+        <h3>Hours</h3>
+        <p>Monday to Friday<br />7:00 AM to 5:00 PM</p>
+        <p>Closed weekends and major holidays. Emergency service 24/7.</p>
+      </div>
+      <div>
+        <h3>Explore</h3>
+        <ul>
+          {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          <li><a href="/contact-us/">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Find us</h3>
+        <ul>
+          {Object.entries(b.social).map(([k, v]) => <li><a href={v} rel="noopener">{k}</a></li>)}
+          <li><a href={b.bbbUrl} rel="noopener">BBB profile</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="wrap footer__legal">© {new Date().getFullYear()} {b.legalName}. All rights reserved.</p>
+  </footer>
+
+  <div class="callbar">
+    <a class="btn btn--red" href={b.phoneHref}>Call now</a>
+    <a class="btn btn--dark" href="/contact-us/">Free quote</a>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var el = document.querySelector('[data-status]');
+      if (!el || !window.Intl) return;
+      var p = {};
+      new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', weekday: 'short', hour: 'numeric', hourCycle: 'h23' })
+        .formatToParts(new Date()).forEach(function (x) { p[x.type] = x.value; });
+      var open = !/Sat|Sun/.test(p.weekday) && +p.hour >= 7 && +p.hour < 17;
+      el.textContent = open ? 'Open today until 5:00 PM' : 'Office closed. Emergency line open now';
+      el.classList.add(open ? 'is-open' : 'is-closed');
+    })();
+  </script>
+</body>
+</html>

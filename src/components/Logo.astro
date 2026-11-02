@@ -1,0 +1,8 @@
+---
+const { class: cls = '', title } = Astro.props;
+---
+<svg class={cls} viewBox="0 0 200 200" role={title ? 'img' : undefined} aria-hidden={title ? undefined : 'true'} aria-label={title}>
+  <path fill="#F11B27" fill-rule="evenodd" d="M86 3H114L193 200H170L165 188H125L120 200H103L100 191L97 200H79L75 188H35L30 200H7ZM99 21 80 68H118ZM52 125 34 174H72ZM146 126 127 174H163Z"/>
+  <path fill="#A5DCFA" d="M78 84H120L128 108L99 188L70 108Z"/>
+  <path fill="none" stroke="#2A63B8" stroke-width="1.5" d="M70 108H128M78 84L86 108L99 188L112 108L120 84M86 108L99 84L112 108"/>
+</svg>

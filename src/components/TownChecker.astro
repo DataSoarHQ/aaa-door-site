@@ -1,0 +1,34 @@
+---
+import { business as b, towns } from '../data/site';
+const { heading: H = 'h2' } = Astro.props;
+const all = [...towns.TX.map((t) => [t, 'TX']), ...towns.LA.map((t) => [t, 'LA'])];
+---
+<div class="towns" data-towns>
+  <label for="town"><H class="towns__q">Do we come to your town?</H></label>
+  <input id="town" type="text" autocomplete="address-level2" placeholder="Type your town" data-town-input />
+  <p class="towns__answer" role="status" data-town-answer>We serve 21 towns across Southeast Texas and Southwest Louisiana.</p>
+  <ul class="towns__list" data-town-list>
+    {all.map(([t, s]) => <li data-town={t.toLowerCase()}>{t}, {s}</li>)}
+  </ul>
+</div>
+<script is:inline define:vars={{ phone: b.phoneDisplay }}>
+  (function () {
+    var box = document.querySelector('[data-towns]');
+    var input = box.querySelector('[data-town-input]');
+    var answer = box.querySelector('[data-town-answer]');
+    var items = Array.prototype.slice.call(box.querySelectorAll('[data-town]'));
+    var start = answer.textContent;
+    input.addEventListener('input', function () {
+      var q = input.value.trim().toLowerCase().replace(/[,.].*$/, '');
+      var hits = items.filter(function (li) {
+        var on = !q || li.dataset.town.indexOf(q) === 0;
+        li.hidden = !on;
+        li.classList.toggle('is-hit', !!q && on);
+        return on;
+      });
+      if (!q) answer.textContent = start;
+      else if (hits.length) answer.textContent = hits.length === 1 ? 'Yes, we serve ' + hits[0].textContent + '.' : 'Yes, we serve ' + hits.map(function (h) { return h.textContent; }).join(' and ') + '.';
+      else answer.textContent = 'That town isn’t on our regular list. Call ' + phone + ' and ask, we may still be able to help.';
+    });
+  })();
+</script>
