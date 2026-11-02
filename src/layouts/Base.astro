@@ -4,41 +4,81 @@ import '../styles/global.css';
 import Logo from '../components/Logo.astro';
 import { business as b, nav, towns } from '../data/site';
 
-const { title, description } = Astro.props;
+const { title, description, noindex = false, services = [] } = Astro.props;
 const path = Astro.url.pathname;
 const canonical = new URL(path, b.url).href;
 const pageTitle = path === '/' ? title : `${title} | ${b.name}`;
+const ogImage = `${b.url}/og.jpg`;
+const ogImageAlt = 'Gray double garage door with a row of windows on a brick home';
 
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'HomeAndConstructionBusiness',
-  name: b.legalName,
-  url: b.url,
-  telephone: '+14093444505',
-  image: `${b.url}/og.jpg`,
-  address: { '@type': 'PostalAddress', streetAddress: b.street, addressLocality: b.city, addressRegion: b.region, postalCode: b.zip, addressCountry: 'US' },
-  openingHoursSpecification: { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '07:00', closes: '17:00' },
-  areaServed: [...towns.TX.map((t) => `${t}, TX`), ...towns.LA.map((t) => `${t}, LA`)],
-  sameAs: Object.values(b.social),
-};
+const businessId = `${b.url}/#business`;
+const websiteId = `${b.url}/#website`;
+const crumb = nav.find((n) => n.href === path)?.label ?? title;
+
+const graph = [
+  {
+    '@type': 'HomeAndConstructionBusiness',
+    '@id': businessId,
+    name: b.legalName,
+    alternateName: [b.name, 'AAA Door & Trim'],
+    description: 'Garage door and commercial door repair, installation and 24/7 emergency service in Southeast Texas and Southwest Louisiana.',
+    url: `${b.url}/`,
+    telephone: '+1-409-344-4505',
+    image: ogImage,
+    logo: `${b.url}/logo.png`,
+    foundingDate: String(b.since),
+    address: { '@type': 'PostalAddress', streetAddress: b.street, addressLocality: b.city, addressRegion: b.region, postalCode: b.zip, addressCountry: 'US' },
+    openingHoursSpecification: { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '07:00', closes: '17:00' },
+    areaServed: [...towns.TX.map((t) => `${t}, TX`), ...towns.LA.map((t) => `${t}, LA`)].map((name) => ({ '@type': 'City', name })),
+    sameAs: [...Object.values(b.social), b.bbbUrl],
+  },
+  { '@type': 'WebSite', '@id': websiteId, url: `${b.url}/`, name: b.name, inLanguage: 'en-US', publisher: { '@id': businessId } },
+  { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: pageTitle, description, inLanguage: 'en-US', isPartOf: { '@id': websiteId }, about: { '@id': businessId } },
+  ...(path === '/' || noindex ? [] : [{
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${b.url}/` },
+      { '@type': 'ListItem', position: 2, name: crumb, item: canonical },
+    ],
+  }]),
+  ...services.map((s) => ({ '@type': 'Service', name: s.name, description: s.text, provider: { '@id': businessId } })),
+];
+const schema = { '@context': 'https://schema.org', '@graph': graph };
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en-US">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{pageTitle}</title>
   <meta name="description" content={description} />
-  <link rel="canonical" href={canonical} />
+  <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+  {!noindex && <link rel="canonical" href={canonical} />}
+  <meta name="author" content={b.legalName} />
+  <meta name="application-name" content={b.name} />
+  <meta name="geo.region" content="US-TX" />
+  <meta name="geo.placename" content={`${b.city}, Texas`} />
+  <link rel="icon" href="/favicon.ico" sizes="48x48" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
   <meta name="theme-color" content="#14171B" />
   <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_US" />
   <meta property="og:site_name" content={b.legalName} />
   <meta property="og:title" content={pageTitle} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
-  <meta property="og:image" content={`${b.url}/og.jpg`} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={ogImageAlt} />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={pageTitle} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+  <meta name="twitter:image:alt" content={ogImageAlt} />
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   <slot name="head" />
 </head>

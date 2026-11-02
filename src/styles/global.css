@@ -163,6 +163,7 @@ p { margin: 0; }
 .team--row li, .team--row li:first-child { border-block: 0; border-top: 4px solid var(--red); padding-top: .9rem; }
 
 /* Service tiles copy the raised, stamped panel of a garage door. */
+.section-title { margin-bottom: 1.75rem; }
 .stamps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; padding: .5rem; background: #cbd8e3; }
 .stamp { padding: 1.5rem 1.5rem 1.65rem; background: var(--white); outline: 1px solid var(--line); outline-offset: -.5rem; }
 .stamp:last-child:nth-child(3n + 1) { grid-column: 1 / -1; }

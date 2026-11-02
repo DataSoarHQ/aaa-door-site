@@ -6,10 +6,13 @@ import Services from '../components/Services.astro';
 import { business as b, residential } from '../data/site';
 import { styles } from '../data/photos';
 ---
-<Base title="Residential Garage Door Repair & Installation" description="Spring repairs, openers, new garage doors, wind load and full-view glass doors, plus interior and exterior doors. Serving Orange, Beaumont and nearby towns. Call 409-344-4505.">
-  <PageHead title="Garage doors and more for your home" lead="From a snapped spring on a Sunday night to a brand new door for the front of your house." />
+<Base title="Residential Garage Door Repair & Installation" services={residential.filter((s) => s.name !== 'Lifetime warranties')} description="Spring repairs, openers, new garage doors, wind load and full-view glass doors, plus interior and exterior doors in Orange, Beaumont and nearby towns.">
+  <PageHead title="Garage door repair and installation for your home" lead="Serving homeowners in Orange, Beaumont and nearby towns, from a snapped spring on a Sunday night to a brand new door for the front of your house." />
   <section class="section">
-    <div class="wrap"><Services items={residential} /></div>
+    <div class="wrap">
+      <h2 class="section-title">Residential services</h2>
+      <Services items={residential} />
+    </div>
   </section>
   <section class="section section--tint">
     <div class="wrap feature">

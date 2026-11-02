@@ -13,6 +13,10 @@ npm run build   # output in dist/
 
 Business facts, services, towns, team, reviews and FAQs are all in `src/data/site.ts`. Photos are listed in `src/data/photos.ts`.
 
+## SEO and metadata
+
+Page titles and descriptions are set on each page's `<Base>` tag. `src/layouts/Base.astro` adds the shared tags and structured data from `src/data/site.ts`. The sitemap and `/llms.txt` (a plain-text summary of the business) are generated at build time, so they follow the same data.
+
 ## Quote form
 
 `src/pages/api/quote.ts` emails requests to the company through [Resend](https://resend.com). It runs under `npm run dev` and on Vercel. Until all three settings below exist, the form tells visitors their request wasn't sent and asks them to call.

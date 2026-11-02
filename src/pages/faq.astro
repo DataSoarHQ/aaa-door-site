@@ -7,7 +7,7 @@ const schema = {
   mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
 };
 ---
-<Base title="Frequently Asked Questions" description="Answers about free quotes, 24/7 emergency service, insurance paperwork, scheduling, openers, maintenance and wind-rated garage doors.">
+<Base title="Garage Door FAQ" description="Answers about free quotes, 24/7 emergency service, insurance paperwork, scheduling, openers, maintenance and wind-rated garage doors in Southeast Texas.">
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(schema)} />
   <PageHead title="Frequently asked questions" lead="Can’t find your answer? Call 409-344-4505." />
   <section class="section">

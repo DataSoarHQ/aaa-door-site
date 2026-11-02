@@ -4,10 +4,13 @@ import PageHead from '../components/PageHead.astro';
 import Services from '../components/Services.astro';
 import { business as b, commercial } from '../data/site';
 ---
-<Base title="Commercial Door Service & Installation" description="Commercial roll-up and sectional doors, motor operators, hollow metal doors, closers, panic hardware and keyed entry for businesses in Southeast Texas and Southwest Louisiana.">
-  <PageHead title="Keep your business doors working" lead="Overhead doors, entries and exits, serviced by a local crew that answers emergency calls 24/7." />
+<Base title="Commercial Door Repair & Installation" services={commercial} description="Commercial roll-up and sectional doors, motor operators, hollow metal doors, closers and panic hardware for businesses in Southeast Texas and Louisiana.">
+  <PageHead title="Commercial door repair and installation" lead="Overhead doors, entries and exits for businesses in Southeast Texas and Southwest Louisiana, with 24/7 emergency service." />
   <section class="section">
-    <div class="wrap"><Services items={commercial} /></div>
+    <div class="wrap">
+      <h2 class="section-title">Commercial services</h2>
+      <Services items={commercial} />
+    </div>
   </section>
   <section class="section section--tint">
     <div class="wrap feature feature--text">

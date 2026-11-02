@@ -4,7 +4,7 @@ const { heading: H = 'h2' } = Astro.props;
 const all = [...towns.TX.map((t) => [t, 'TX']), ...towns.LA.map((t) => [t, 'LA'])];
 ---
 <div class="towns" data-towns>
-  <label for="town"><H class="towns__q">Do we come to your town?</H></label>
+  <H class="towns__q"><label for="town">Do we come to your town?</label></H>
   <input id="town" type="text" autocomplete="address-level2" placeholder="Type your town" data-town-input />
   <p class="towns__answer" role="status" data-town-answer>We serve 21 towns across Southeast Texas and Southwest Louisiana.</p>
   <ul class="towns__list" data-town-list>
