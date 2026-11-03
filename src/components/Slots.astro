@@ -1,0 +1,31 @@
+---
+// Renders text as slot-machine reels. Digits and grade letters spin; everything
+// else stays put. Without JS (or with reduced motion) the reels rest on the
+// final value, so the real text is always what shows.
+const { text } = Astro.props;
+const LETTERS = ['F', 'D', 'C', 'B', 'A'];
+
+let reel = 0;
+const chars = [...String(text)];
+const parts = chars.map((ch, k) => {
+  const digit = /\d/.test(ch);
+  // Only a letter grade spins (the A in "A+"), not ordinary words like "BBB".
+  const letter = LETTERS.includes(ch) && chars[k + 1] === '+';
+  if (!digit && !letter) return { ch };
+  const i = reel++;
+  const set = digit ? '0123456789'.split('') : LETTERS;
+  const at = set.indexOf(ch);
+  // Each reel to the right spins a little longer, so they stop left to right.
+  const len = set.length * (2 + i) + 1;
+  const strip = Array.from({ length: len + 1 }, (_, k) => set[(at + k - (len - 1) + set.length * 99) % set.length]);
+  return { ch, strip, n: len - 1, i };
+});
+---
+<span class="slots" data-slots>
+  <span class="sr-only">{text}</span>
+  <span aria-hidden="true">
+    {parts.map((p) => p.strip
+      ? <span class="reel" style={`--n:${p.n};--i:${p.i}`}><span class="reel__strip">{p.strip.map((s) => <span>{s}</span>)}</span></span>
+      : <span>{p.ch === ' ' ? ' ' : p.ch}</span>)}
+  </span>
+</span>

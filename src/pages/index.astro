@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Logo from '../components/Logo.astro';
 import Reviews from '../components/Reviews.astro';
 import TownChecker from '../components/TownChecker.astro';
+import Slots from '../components/Slots.astro';
 import { business as b, residential, commercial, team } from '../data/site';
 import { jobs, styles } from '../data/photos';
 
@@ -30,9 +31,63 @@ const trouble = [
         <a class="btn btn--ghost btn--lg" href="/contact-us/">Get a free quote</a>
       </div>
     </div>
-    <div class="hero__photo">
+    <div class="hero__photo" data-photo-door>
       <Image src={jobs[0].src} alt={jobs[0].alt} widths={[640, 960, 1400]} sizes="(max-width: 900px) 100vw, 55vw" loading="eager" fetchpriority="high" />
+      {/* The door in the photo, traced in the photo's own pixels (2560x1920), so it can roll up. */}
+      <svg class="photo-door" viewBox="0 0 2560 1920" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <clipPath id="door-opening"><polygon points="156,424 2125,568 2125,1377 156,1600" /></clipPath>
+          <clipPath id="door-slab"><polygon points="150,418 2131,562 2131,1383 150,1606" /></clipPath>
+          <linearGradient id="garage-dark" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#050608" />
+            <stop offset=".65" stop-color="#16191c" />
+            <stop offset="1" stop-color="#34373a" />
+          </linearGradient>
+          <radialGradient id="garage-light" cx="1120" cy="610" r="950" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ffe7ad" stop-opacity=".8" />
+            <stop offset=".3" stop-color="#ffd27a" stop-opacity=".25" />
+            <stop offset="1" stop-color="#ffd27a" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <g clip-path="url(#door-opening)">
+          <rect x="0" y="0" width="2560" height="1920" fill="url(#garage-dark)" />
+          <g fill="none" stroke="#2a2e33" stroke-width="12">
+            <path d="M156 470 L2125 600 M156 520 L2125 640" />
+            <path d="M1120 500 V585" />
+          </g>
+          <rect x="1040" y="585" width="160" height="60" rx="6" fill="#23272c" />
+          <rect class="photo-door__bulb" x="1080" y="645" width="80" height="14" rx="7" fill="#fff3cf" />
+          <rect class="photo-door__glow" x="0" y="0" width="2560" height="1920" fill="url(#garage-light)" />
+          <g class="photo-door__slab">
+            <image href="" width="2560" height="1920" clip-path="url(#door-slab)" />
+          </g>
+        </g>
+      </svg>
+      <button class="opener" type="button" aria-pressed="false" data-opener>
+        <span class="opener__btn" aria-hidden="true"></span>
+        <span class="opener__label">Open the door</span>
+      </button>
     </div>
+    <script is:inline>
+      (function () {
+        var box = document.querySelector('[data-photo-door]');
+        var img = box.querySelector('img');
+        var slab = box.querySelector('.photo-door image');
+        var btn = box.querySelector('[data-opener]');
+        var label = btn.querySelector('.opener__label');
+        function ready() { slab.setAttribute('href', img.currentSrc || img.src); box.classList.add('is-ready'); }
+        if (img.complete && img.naturalWidth) ready(); else img.addEventListener('load', ready, { once: true });
+        function toggle() {
+          var open = !box.classList.contains('is-open');
+          box.classList.toggle('is-open', open);
+          btn.setAttribute('aria-pressed', String(open));
+          label.textContent = open ? 'Close the door' : 'Open the door';
+          btn.classList.add('was-used');
+        }
+        btn.addEventListener('click', toggle);
+        box.querySelector('svg').addEventListener('click', toggle);
+      })();
+    </script>
     <div class="curtain" aria-hidden="true">
       <div class="curtain__panel"></div>
       <div class="curtain__panel curtain__panel--windows"></div>
@@ -43,12 +98,39 @@ const trouble = [
     </div>
   </section>
 
-  <ul class="proof wrap" aria-label="Why customers choose us">
-    <li><strong>{b.rating} stars</strong><span>{b.reviewCount} customer reviews</span></li>
-    <li><strong>A+ with BBB</strong><span>Accredited since 2018</span></li>
-    <li><strong>24/7</strong><span>Emergency service</span></li>
-    <li><strong>Since {b.since}</strong><span>Family owned in Orange, TX</span></li>
+  <ul class="proof wrap" aria-label="Why customers choose us" data-proof>
+    <li><strong><Slots text={`${b.rating} stars`} /></strong><span><Slots text={`${b.reviewCount}`} /> customer reviews</span></li>
+    <li><strong><Slots text="A+ with BBB" /></strong><span>Accredited since <Slots text="2018" /></span></li>
+    <li><strong><Slots text="24/7" /></strong><span>Emergency service</span></li>
+    <li><strong>Since <Slots text={`${b.since}`} /></strong><span>Family owned in Orange, TX</span></li>
   </ul>
+  <script is:inline>
+    (function () {
+      var list = document.querySelector('[data-proof]');
+      if (!list || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      list.classList.add('slots-armed');
+      function spin(el) {
+        el.classList.remove('is-spinning', 'is-landed');
+        void el.offsetWidth;
+        el.classList.add('is-spinning');
+        var reels = el.querySelectorAll('.reel');
+        var slowest = reels[0];
+        reels.forEach(function (r) { if (+r.style.getPropertyValue('--i') >= +slowest.style.getPropertyValue('--i')) slowest = r; });
+        if (slowest) slowest.addEventListener('animationend', function () { el.classList.add('is-landed'); }, { once: true });
+      }
+      function start() {
+        // Let the hero door finish rolling up before the reels go.
+        var wait = document.documentElement.classList.contains('door-seen') ? 150 : Math.max(150, 1700 - performance.now());
+        setTimeout(function () {
+          list.querySelectorAll('li').forEach(function (li, i) { setTimeout(function () { spin(li); }, i * 180); });
+        }, wait);
+      }
+      var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); start(); } }, { threshold: 0.5 });
+      io.observe(list);
+      // Pull the lever again: click a stat to respin it.
+      list.addEventListener('click', function (e) { var li = e.target.closest('li'); if (li) spin(li); });
+    })();
+  </script>
 
   <section class="section trouble">
     <div class="wrap trouble__grid">
