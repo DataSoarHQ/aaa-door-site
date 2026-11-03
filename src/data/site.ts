@@ -11,7 +11,7 @@ export const business = {
   region: 'TX',
   zip: '77632',
   url: 'https://aaadoortx.com',
-  rating: '4.9',
+  rating: '5',
   reviewCount: 121,
   reviewsUrl: 'https://reviews.birdeye.com/aaa-door-llc-156201736488888',
   bbbUrl: 'https://www.bbb.org/us/tx/orange/profile/garage-doors/aaa-door-company-0845-90078848',
