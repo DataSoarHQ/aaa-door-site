@@ -8,6 +8,14 @@ import Slots from '../components/Slots.astro';
 import { business as b, residential, commercial, team } from '../data/site';
 import { jobs, styles } from '../data/photos';
 
+const ticker = [
+  { label: 'Free Inspections', href: '/contact-us/' },
+  { label: 'Residential Services', href: '/residential/' },
+  { label: 'Commercial Services', href: '/commercial/' },
+  { label: '24/7 Emergency Services', href: b.phoneHref },
+  { label: `Call Now ${b.phoneDisplay}`, href: b.phoneHref },
+];
+
 const trouble = [
   { q: 'A spring or cable snapped', a: 'A loud bang followed by a door that feels too heavy usually means a broken spring. Leave the door where it is and don’t pull on it. Springs and cables hold serious tension and can hurt you.' },
   { q: 'The door won’t open or close', a: 'If your car is stuck inside or the door won’t shut, call us. Emergency service runs 24/7, so you don’t have to wait for Monday morning.' },
@@ -97,6 +105,18 @@ const trouble = [
       <Logo class="curtain__logo" />
     </div>
   </section>
+
+  <div class="ticker" aria-label="Our services">
+    <div class="ticker__track">
+      {[0, 1].map((copy) => (
+        <ul class="ticker__group" aria-hidden={copy ? 'true' : undefined}>
+          {[0, 1].flatMap(() => ticker).map((t) => (
+            <li><a href={t.href} tabindex={copy ? -1 : undefined}>{t.label}</a><span class="ticker__sep" aria-hidden="true"></span></li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  </div>
 
   <ul class="proof wrap" aria-label="Why customers choose us" data-proof>
     <li><strong><Slots text={`${b.rating} stars`} /></strong><span><Slots text={`${b.reviewCount}`} /> customer reviews</span></li>

@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
 import Services from '../components/Services.astro';
+import Reveal from '../components/Reveal.astro';
 import { business as b, residential } from '../data/site';
 import { styles } from '../data/photos';
 ---
@@ -10,14 +11,14 @@ import { styles } from '../data/photos';
   <PageHead title="Garage door repair and installation for your home" lead="Serving homeowners in Orange, Beaumont and nearby towns, from a snapped spring on a Sunday night to a brand new door for the front of your house." />
   <section class="section">
     <div class="wrap">
-      <h2 class="section-title">Residential services</h2>
+      <h2 class="section-title" data-reveal="up">Residential services</h2>
       <Services items={residential} />
     </div>
   </section>
   <section class="section section--tint">
     <div class="wrap feature">
-      <Image src={styles[0].src} alt={styles[0].alt} widths={[500, 950]} sizes="(max-width: 900px) 100vw, 50vw" />
-      <div>
+      <div class="wipe" data-reveal="wipe"><Image src={styles[0].src} alt={styles[0].alt} widths={[500, 950]} sizes="(max-width: 900px) 100vw, 50vw" /></div>
+      <div data-reveal="right">
         <h2>Choosing a new door?</h2>
         <p class="lede">We’ll come out, measure and walk you through your options, with a written quote for free. Living near the Gulf? Ask us about wind-rated doors, since not every style comes wind-rated.</p>
         <div class="actions">
@@ -27,4 +28,5 @@ import { styles } from '../data/photos';
       </div>
     </div>
   </section>
+  <Reveal slot="head" />
 </Base>

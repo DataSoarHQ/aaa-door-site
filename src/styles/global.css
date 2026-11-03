@@ -140,6 +140,21 @@ p { margin: 0; }
   .btn { transition: none; }
 }
 
+/* Scrolling service ticker under the hero. Two identical groups; the track slides one group's width and loops. */
+.ticker { overflow: hidden; background: var(--red); color: var(--white); border-block: 3px solid var(--ink); }
+.ticker__track { display: flex; width: max-content; animation: ticker 38s linear infinite; }
+.ticker:hover .ticker__track, .ticker:focus-within .ticker__track { animation-play-state: paused; }
+.ticker__group { display: flex; flex: none; }
+.ticker li { display: flex; align-items: center; }
+.ticker a { padding: .95rem 1.6rem; font-size: 1.15rem; font-weight: 800; font-stretch: 112%; letter-spacing: .04em; text-transform: uppercase; text-decoration: none; white-space: nowrap; }
+.ticker a:hover { text-decoration: underline; text-underline-offset: .2em; }
+.ticker__sep { width: .55rem; height: .55rem; background: var(--white); transform: rotate(45deg); }
+@keyframes ticker { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .ticker__track { animation: none; width: auto; flex-wrap: wrap; justify-content: center; }
+  .ticker__group[aria-hidden] { display: none; }
+}
+
 .proof { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; padding-block: 1.75rem; border-bottom: 1px solid var(--line); }
 .proof li { display: flex; flex-direction: column; }
 .proof strong { font-size: 1.4rem; font-weight: 800; font-stretch: 112%; line-height: 1.2; }
@@ -215,6 +230,30 @@ p { margin: 0; }
 .stamp:last-child:nth-child(3n + 1) { grid-column: 1 / -1; }
 .stamp:last-child:nth-child(3n + 2) { grid-column: span 2; }
 .stamp h3 { margin-bottom: .5rem; }
+/* Cards lean toward the pointer and lift off the wall. Tilt uses transform; the scroll reveal uses translate/scale, so they don't fight. */
+.stamp[data-tilt] { position: relative; transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .25s ease-out, box-shadow .25s ease-out, translate .7s cubic-bezier(.2, .9, .3, 1.25) var(--d, 0ms), scale .7s cubic-bezier(.2, .9, .3, 1.25) var(--d, 0ms), opacity .5s ease var(--d, 0ms); }
+.stamp[data-tilt]::before { content: ''; position: absolute; inset: 0 0 auto; height: 4px; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform .35s ease; }
+.stamp[data-tilt]::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgb(165 220 250 / .28), transparent 60%); opacity: 0; transition: opacity .25s; }
+@media (hover: hover) {
+  .stamp[data-tilt]:hover { z-index: 2; box-shadow: 0 18px 36px rgb(20 23 27 / .22); transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(24px); }
+  .stamp[data-tilt]:hover::before { transform: scaleX(1); }
+  .stamp[data-tilt]:hover::after { opacity: 1; }
+  .stamp[data-tilt]:hover h3 { color: var(--red-dark); }
+}
+
+/* Scroll entrances. Only hidden once the Reveal script has armed the page. */
+.reveal-armed [data-reveal] { opacity: 0; transition: opacity .6s ease var(--d, 0ms), translate .8s cubic-bezier(.2, .8, .2, 1) var(--d, 0ms), scale .8s cubic-bezier(.2, .8, .2, 1) var(--d, 0ms), clip-path 1.1s cubic-bezier(.65, 0, .25, 1) var(--d, 0ms); }
+.reveal-armed [data-reveal='pop'] { translate: 0 48px; scale: .86; }
+.reveal-armed [data-reveal='up'] { translate: 0 28px; }
+.reveal-armed [data-reveal='left'] { translate: -60px 0; }
+.reveal-armed [data-reveal='right'] { translate: 60px 0; }
+.reveal-armed [data-reveal].is-in { opacity: 1; translate: none; scale: none; }
+/* The wrapper is what gets observed; only the photo inside is clipped, so it still counts as on screen. */
+.wipe { overflow: hidden; }
+.reveal-armed [data-reveal='wipe'] { opacity: 1; }
+.reveal-armed [data-reveal='wipe'] img { clip-path: inset(100% 0 0 0); scale: 1.12; transition: clip-path 1.1s cubic-bezier(.65, 0, .25, 1), scale 1.6s cubic-bezier(.2, .8, .2, 1); }
+.reveal-armed [data-reveal='wipe'].is-in img { clip-path: inset(0 0 0 0); scale: none; }
+.reveal-armed .stamp[data-tilt] { transition: transform .25s ease-out, box-shadow .25s ease-out, translate .7s cubic-bezier(.2, .9, .3, 1.25) var(--d, 0ms), scale .7s cubic-bezier(.2, .9, .3, 1.25) var(--d, 0ms), opacity .5s ease var(--d, 0ms); }
 .stamp p { color: var(--muted); }
 
 .pagehead { padding-block: clamp(3rem, 7vw, 5.5rem); color: var(--white); background: linear-gradient(90deg, rgb(20 23 27 / .96) 40%, rgb(20 23 27 / .72)), var(--stamp) 0 0 / 240px 25% repeat, var(--steel); }

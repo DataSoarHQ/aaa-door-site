@@ -1,0 +1,31 @@
+---
+// Scroll entrance animations and card tilt. Elements marked data-reveal start hidden
+// only once this script arms the page, so without JS (or with reduced motion) nothing hides.
+---
+<script is:inline>
+  (function () {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+    document.documentElement.classList.add('reveal-armed');
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+    function init() {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('[data-reveal]').forEach(function (el) { io.observe(el); });
+
+    // Cards lean toward the pointer, like a panel you can push.
+    if (!matchMedia('(hover: hover)').matches) return;
+    document.querySelectorAll('[data-tilt]').forEach(function (el) {
+      el.addEventListener('pointermove', function (e) {
+        var r = el.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        el.style.setProperty('--ry', (x * 10).toFixed(2) + 'deg');
+        el.style.setProperty('--rx', (y * -10).toFixed(2) + 'deg');
+        el.style.setProperty('--gx', ((x + 0.5) * 100).toFixed(1) + '%');
+        el.style.setProperty('--gy', ((y + 0.5) * 100).toFixed(1) + '%');
+      });
+      el.addEventListener('pointerleave', function () { el.style.removeProperty('--rx'); el.style.removeProperty('--ry'); });
+    });
+    }
+  })();
+</script>

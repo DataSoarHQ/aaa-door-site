@@ -2,8 +2,8 @@
 const { items } = Astro.props;
 ---
 <ul class="stamps">
-  {items.map((s) => (
-    <li class="stamp">
+  {items.map((s, i) => (
+    <li class="stamp" data-reveal="pop" data-tilt style={`--d:${(i % 3) * 110}ms`}>
       <h3>{s.name}</h3>
       <p>{s.text}</p>
     </li>
