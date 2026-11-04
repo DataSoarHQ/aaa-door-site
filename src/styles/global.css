@@ -78,7 +78,13 @@ p { margin: 0; }
 .menu { display: none; margin-left: auto; }
 .menu summary { list-style: none; cursor: pointer; font-weight: 700; padding: .55rem .9rem; border: 2px solid var(--ink); border-radius: 3px; }
 .menu summary::-webkit-details-marker { display: none; }
-.menu nav { position: absolute; left: 0; right: 0; top: 100%; background: var(--white); border-bottom: 3px solid var(--ink); padding: .5rem 1.25rem 1rem; }
+/* Fixed to the space below the header (--menu-top is set by script) so the panel
+   always fits the screen, scrolls on its own, and never hands scrolling to the page. */
+.menu nav { position: fixed; left: 0; right: 0; top: var(--menu-top, 4.5rem); bottom: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; background: var(--white); border-top: 1px solid var(--line); padding: .5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom)); }
+/* Lock on html only: hiding overflow on body too would make body the scroll
+   container and push the sticky header off screen. */
+html.menu-open { overflow: hidden; }
+html.menu-open .callbar { display: none; }
 .menu nav a { display: block; padding: .8rem 0; font-size: 1.1rem; font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--line); }
 
 /* Hero: a sectional door covers it, then rolls up into the header. */
