@@ -46,8 +46,8 @@ export const residential = [
   { name: 'Interior door repair and replacement', text: 'Doors that stick, sag or won’t latch put right, or swapped for new ones.' },
   { name: 'Exterior door repair and replacement', text: 'Entry and side doors repaired or replaced so they close, seal and lock the way they should.' },
   { name: 'Annual and bi-annual maintenance contracts', text: 'Scheduled visits once or twice a year to catch worn parts before they leave you stuck.' },
-  { name: 'Lifetime warranties', text: 'Lifetime warranties are available. Your written quote spells out what’s covered.' },
-  { name: '24/7 emergency service', text: 'Car trapped in the garage or a door that won’t close at night? Call any hour.' },
+  { name: 'Lifetime warranties', perk: true, text: 'Lifetime warranties are available. Your written quote spells out what’s covered.' },
+  { name: '24/7 emergency service', perk: true, text: 'Car trapped in the garage or a door that won’t close at night? Call any hour.' },
 ];
 
 export const commercial = [

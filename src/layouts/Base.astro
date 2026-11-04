@@ -115,7 +115,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 
   <section class="closer">
     <div class="wrap closer__in">
-      <h2>Door trouble? Talk to someone local.</h2>
+      <p class="closer__title">Door trouble? Talk to someone local.</p>
       <div class="actions">
         <a class="btn btn--white" href={b.phoneHref}>Call {b.phoneDisplay}</a>
         <a class="btn btn--outline" href="/contact-us/">Get a free quote</a>
@@ -134,19 +134,19 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
         <p><a href={b.phoneHref}>{b.phoneDisplay}</a></p>
       </div>
       <div>
-        <h3>Hours</h3>
+        <p class="footer__label">Hours</p>
         <p>Monday to Friday<br />7:00 AM to 5:00 PM</p>
         <p>Closed weekends and major holidays. Emergency service 24/7.</p>
       </div>
       <div>
-        <h3>Explore</h3>
+        <p class="footer__label">Explore</p>
         <ul>
           {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
           <li><a href="/contact-us/">Contact</a></li>
         </ul>
       </div>
       <div>
-        <h3>Find us</h3>
+        <p class="footer__label">Find us</p>
         <ul>
           {Object.entries(b.social).map(([k, v]) => <li><a href={v} rel="noopener">{k}</a></li>)}
           <li><a href={b.bbbUrl} rel="noopener">BBB profile</a></li>

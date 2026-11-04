@@ -41,9 +41,9 @@ const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURICompone
       <aside class="contact__side">
         <h2>Prefer to call?</h2>
         <p><a class="contact__phone" href={b.phoneHref}>{b.phoneDisplay}</a></p>
-        <h3>Hours</h3>
+        <p class="contact__label">Hours</p>
         <p>Monday to Friday, 7:00 AM to 5:00 PM. Closed weekends and major holidays, with emergency service available 24/7.</p>
-        <h3>Office</h3>
+        <p class="contact__label">Office</p>
         <address>{b.legalName}<br />{b.street}<br />{b.city}, {b.region} {b.zip}</address>
         <p><a class="link" href={maps} rel="noopener">Get directions</a></p>
       </aside>

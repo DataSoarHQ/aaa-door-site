@@ -4,7 +4,7 @@ const { items } = Astro.props;
 <ul class="stamps">
   {items.map((s, i) => (
     <li class="stamp" data-reveal="pop" data-tilt style={`--d:${(i % 3) * 110}ms`}>
-      <h3>{s.name}</h3>
+      {s.perk ? <p class="stamp__title">{s.name}</p> : <h2 class="stamp__title">{s.name}</h2>}
       <p>{s.text}</p>
     </li>
   ))}

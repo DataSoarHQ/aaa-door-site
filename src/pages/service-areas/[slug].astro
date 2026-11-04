@@ -48,15 +48,15 @@ const services = [
 
   <section class="section section--tight">
     <div class="wrap">
-      <h2>Door services in {area.name}</h2>
+      <h2>Garage door services in {area.name}</h2>
       <div class="split">
         <div class="split__col">
-          <h3>For your home</h3>
+          <h2>Residential garage door repair in {area.name}</h2>
           <ul class="ticks">{residential.slice(0, 7).map((s) => <li>{s.name}</li>)}</ul>
           <a class="btn btn--dark" href="/residential/">See residential services</a>
         </div>
         <div class="split__col">
-          <h3>For your business</h3>
+          <h2>Commercial door service in {area.name}</h2>
           <ul class="ticks">{commercial.slice(0, 7).map((s) => <li>{s.name}</li>)}</ul>
           <a class="btn btn--dark" href="/commercial/">See commercial services</a>
         </div>
@@ -76,7 +76,7 @@ const services = [
 
   <section class="section">
     <div class="wrap">
-      <h2>Also serving nearby</h2>
+      <h2>Garage door repair near {area.name}</h2>
       <ul class="area-links">
         {nearby.map((a) => <li><a class="link" href={areaHref(a)}>Garage door repair in {a.name}, {a.state}</a></li>)}
       </ul>
