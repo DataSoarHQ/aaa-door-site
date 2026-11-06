@@ -2,7 +2,7 @@
 import { areas } from './areas';
 
 export const business = {
-  name: 'AAA Door',
+  name: 'AAA Door LLC',
   legalName: 'AAA Door LLC',
   phoneDisplay: '409-344-4505',
   phoneHref: 'tel:+14093444505',
@@ -14,6 +14,7 @@ export const business = {
   rating: '5',
   reviewCount: 121,
   reviewsUrl: 'https://reviews.birdeye.com/aaa-door-llc-156201736488888',
+  googleUrl: 'https://share.google/uO3vrljZSPx3E6xr4',
   bbbUrl: 'https://www.bbb.org/us/tx/orange/profile/garage-doors/aaa-door-company-0845-90078848',
   since: 2014,
   social: {

@@ -21,7 +21,7 @@ export const regionNotes: Record<Region, string> = {
 export const areas: Area[] = [
   {
     name: 'Orange', state: 'TX', county: 'Orange County', region: 'coast',
-    intro: 'Orange is home base for AAA Door. Our office is on Lazy Lane, so when a spring snaps or a door won’t close in town or out toward the Sabine River, we’re working from close by.',
+    intro: 'Orange is home base for AAA Door LLC. Our office is on Lazy Lane, so when a spring snaps or a door won’t close in town or out toward the Sabine River, we’re working from close by.',
     nearby: ['Bridge City', 'Vinton', 'Deweyville', 'Starks'],
   },
   {
