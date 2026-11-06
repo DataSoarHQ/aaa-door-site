@@ -1,6 +1,6 @@
 import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { handleQuote } from '../src/lib/quote.js';
+import { handleQuote, sender } from '../src/lib/quote.js';
 
 const req = (body) => new Request('http://x/api/quote', { method: 'POST', body: typeof body === 'string' ? body : JSON.stringify(body) });
 const good = { name: 'Pat Lee', phone: '(409) 555-0100', type: 'Garage door repair', message: 'Spring\nbroke' };
@@ -55,4 +55,10 @@ test('reports failure when the email provider rejects or is unreachable', async 
   assert.equal((await POST(req(good))).status, 502);
   globalThis.fetch = async () => { throw new Error('down'); };
   assert.equal((await POST(req(good))).status, 502);
+});
+
+test('names the sender AAA Door LLC unless the address already has a name', async () => {
+  await POST(req(good));
+  assert.equal(sent[0].body.from, 'AAA Door LLC Website <site@x.com>');
+  assert.equal(sender('Someone <a@x.com>'), 'Someone <a@x.com>');
 });

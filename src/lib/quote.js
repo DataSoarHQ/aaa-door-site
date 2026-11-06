@@ -4,6 +4,11 @@ const json = (body, status) =>
 
 const clean = (value, max) => String(value ?? '').replace(/\s+/g, ' ').trim().slice(0, max);
 
+// QUOTE_FROM_EMAIL is the shared bare address (forms@datasoar.io), so the
+// business name is added here. A value that already has a name is left alone.
+const SENDER_NAME = 'AAA Door LLC Website';
+export const sender = (from) => (from.includes('<') ? from : `${SENDER_NAME} <${from.trim()}>`);
+
 export async function handleQuote(request, { key, to, from }) {
   let data;
   try {
@@ -36,7 +41,7 @@ export async function handleQuote(request, { key, to, from }) {
     method: 'POST',
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from,
+      from: sender(from),
       to: to.split(',').map((x) => x.trim()),
       subject: `Quote request: ${type || 'Website'} from ${name}`,
       ...(email ? { reply_to: email } : {}),

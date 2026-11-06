@@ -27,9 +27,9 @@ For local use, copy `.env.example` to `.env`. In production, add the same three 
 | --- | --- |
 | `RESEND_API_KEY` | Resend API key |
 | `QUOTE_TO_EMAIL` | Company inbox that receives requests (comma-separated for several) |
-| `QUOTE_FROM_EMAIL` | Sender on a domain verified in Resend, such as `AAA Door LLC Website <quotes@aaadoortx.com>` |
+| `QUOTE_FROM_EMAIL` | `forms@datasoar.io`. The code adds the name, so emails come from `AAA Door LLC Website <forms@datasoar.io>` |
 
-Verifying `aaadoortx.com` in Resend means adding the DNS records Resend lists in GoDaddy. They sit alongside the Microsoft 365 email records, so don't change the existing `MX` or root `SPF` records.
+To send from the company's own domain instead, verify `aaadoortx.com` in Resend, which means adding the DNS records Resend lists in GoDaddy. They sit alongside the Microsoft 365 email records, so don't change the existing `MX` or root `SPF` records.
 
 ## Launch
 
