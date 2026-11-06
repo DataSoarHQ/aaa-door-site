@@ -25,7 +25,7 @@ const trouble = [
   { q: 'I just want a new door', a: 'Good timing to look around. Browse door styles in the gallery, then ask for a free quote and we’ll come out to measure and go over your options.' },
 ];
 ---
-<Base title="AAA Door | Garage Door Repair & Installation in Orange, TX" description="Garage door repair and installation for homes and businesses in Orange, Beaumont and Port Arthur, TX. 24/7 emergency service. Call 409-344-4505.">
+<Base title="AAA Door LLC | Garage Door Repair & Installation in Orange, TX" description="Garage door repair and installation for homes and businesses in Orange, Beaumont and Port Arthur, TX. 24/7 emergency service. Call 409-344-4505.">
   <script is:inline slot="head">
     try { if (sessionStorage.getItem('aaaDoor')) document.documentElement.classList.add('door-seen'); sessionStorage.setItem('aaaDoor', '1'); } catch (e) {}
   </script>
@@ -41,33 +41,34 @@ const trouble = [
     </div>
     <div class="hero__photo" data-photo-door>
       <Image src={jobs[0].src} alt={jobs[0].alt} widths={[640, 960, 1400]} sizes="(max-width: 900px) 100vw, 55vw" loading="eager" fetchpriority="high" />
-      {/* The door in the photo, traced in the photo's own pixels (2560x1920), so it can roll up. */}
-      <svg class="photo-door" viewBox="0 0 2560 1920" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      {/* The door in the photo, traced in the photo's own pixels (2496x1580), so it can roll up.
+          The photo is perspective-corrected, so the opening and the door are plain, level rectangles. */}
+      <svg class="photo-door" viewBox="0 0 2496 1580" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         <defs>
-          <clipPath id="door-opening"><polygon points="156,424 2125,568 2125,1377 156,1600" /></clipPath>
-          <clipPath id="door-slab"><polygon points="150,418 2131,562 2131,1383 150,1606" /></clipPath>
+          <clipPath id="door-opening"><rect x="92" y="334" width="1971" height="994" /></clipPath>
+          <clipPath id="door-slab"><rect x="86" y="328" width="1983" height="1006" /></clipPath>
           <linearGradient id="garage-dark" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="#050608" />
             <stop offset=".65" stop-color="#16191c" />
             <stop offset="1" stop-color="#34373a" />
           </linearGradient>
-          <radialGradient id="garage-light" cx="1120" cy="610" r="950" gradientUnits="userSpaceOnUse">
+          <radialGradient id="garage-light" cx="1078" cy="430" r="950" gradientUnits="userSpaceOnUse">
             <stop offset="0" stop-color="#ffe7ad" stop-opacity=".8" />
             <stop offset=".3" stop-color="#ffd27a" stop-opacity=".25" />
             <stop offset="1" stop-color="#ffd27a" stop-opacity="0" />
           </radialGradient>
         </defs>
         <g clip-path="url(#door-opening)">
-          <rect x="0" y="0" width="2560" height="1920" fill="url(#garage-dark)" />
+          <rect x="0" y="0" width="2496" height="1580" fill="url(#garage-dark)" />
           <g fill="none" stroke="#2a2e33" stroke-width="12">
-            <path d="M156 470 L2125 600 M156 520 L2125 640" />
-            <path d="M1120 500 V585" />
+            <path d="M92 380 H2063 M92 430 H2063" />
+            <path d="M1078 380 V460" />
           </g>
-          <rect x="1040" y="585" width="160" height="60" rx="6" fill="#23272c" />
-          <rect class="photo-door__bulb" x="1080" y="645" width="80" height="14" rx="7" fill="#fff3cf" />
-          <rect class="photo-door__glow" x="0" y="0" width="2560" height="1920" fill="url(#garage-light)" />
+          <rect x="998" y="460" width="160" height="60" rx="6" fill="#23272c" />
+          <rect class="photo-door__bulb" x="1038" y="520" width="80" height="14" rx="7" fill="#fff3cf" />
+          <rect class="photo-door__glow" x="0" y="0" width="2496" height="1580" fill="url(#garage-light)" />
           <g class="photo-door__slab">
-            <image href="" width="2560" height="1920" clip-path="url(#door-slab)" />
+            <image href="" width="2496" height="1580" clip-path="url(#door-slab)" />
           </g>
         </g>
       </svg>
@@ -214,12 +215,23 @@ const trouble = [
     <div class="wrap about-teaser">
       <div>
         <h2>A small, family-run crew</h2>
-        <p class="lede">AAA Door is family owned and operated. We’d rather have your business for good than just this once, so we explain what’s wrong, give you the price in writing and stand behind the work.</p>
+        <p class="lede">AAA Door LLC is family owned and operated. We’d rather have your business for good than just this once, so we explain what’s wrong, give you the price in writing and stand behind the work.</p>
         <a class="link" href="/about-us/">Meet the team</a>
       </div>
       <ul class="team">
         {team.map((t) => <li><strong>{t.name}</strong><span>{t.role}</span></li>)}
       </ul>
+    </div>
+  </section>
+
+  <section class="section google" slot="before-footer" aria-labelledby="google-title">
+    <div class="wrap">
+      <div class="heading-row">
+        <h2 id="google-title">Find us on Google</h2>
+        <a class="btn btn--dark" href={b.googleUrl} rel="noopener">View us on Google</a>
+      </div>
+      <p class="lede">{b.legalName}, {b.street}, {b.city}, {b.region} {b.zip}</p>
+      <iframe class="google__map" src={`https://www.google.com/maps?q=${encodeURIComponent(`${b.legalName}, ${b.street}, ${b.city}, ${b.region} ${b.zip}`)}&output=embed`} title="AAA Door LLC on Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
     </div>
   </section>
 </Base>

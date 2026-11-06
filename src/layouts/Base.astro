@@ -21,7 +21,7 @@ const graph = [
     '@type': 'HomeAndConstructionBusiness',
     '@id': businessId,
     name: b.legalName,
-    alternateName: [b.name, 'AAA Door & Trim'],
+    alternateName: ['AAA Door', 'AAA Door & Trim'],
     description: 'Garage door and commercial door repair, installation and 24/7 emergency service in Southeast Texas and Southwest Louisiana.',
     url: `${b.url}/`,
     telephone: '+1-409-344-4505',
@@ -57,7 +57,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
   <meta name="geo.region" content="US-TX" />
   <meta name="geo.placename" content={`${b.city}, Texas`} />
   <link rel="icon" href="/favicon.ico" sizes="48x48" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="theme-color" content="#14171B" />
@@ -92,7 +92,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
     <div class="wrap header__in">
       <a class="brand" href="/" aria-label={`${b.name} home`}>
         <Logo class="brand__mark" />
-        <span class="brand__word">AAA Door</span>
+        <span class="brand__word">AAA Door LLC</span>
       </a>
       <nav class="nav" aria-label="Main">
         {nav.map((n) => <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>)}
@@ -123,12 +123,14 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
     </div>
   </section>
 
+  <slot name="before-footer" />
+
   <footer class="footer">
     <div class="wrap footer__grid">
       <div>
         <a class="brand brand--light" href="/" aria-label={`${b.name} home`}>
           <Logo class="brand__mark" />
-          <span class="brand__word">AAA Door</span>
+          <span class="brand__word">AAA Door LLC</span>
         </a>
         <address>{b.street}<br />{b.city}, {b.region} {b.zip}</address>
         <p><a href={b.phoneHref}>{b.phoneDisplay}</a></p>
