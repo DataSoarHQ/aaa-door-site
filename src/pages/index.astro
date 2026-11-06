@@ -40,10 +40,12 @@ const trouble = [
       </div>
     </div>
     <div class="hero__photo" data-photo-door>
-      <Image src={jobs[0].src} alt={jobs[0].alt} widths={[640, 960, 1400]} sizes="(max-width: 900px) 100vw, 55vw" loading="eager" fetchpriority="high" />
+      <Image class="hero__img" src={jobs[0].src} alt={jobs[0].alt} widths={[640, 960, 1400]} sizes="(max-width: 900px) 100vw, 55vw" loading="eager" fetchpriority="high" />
+      {/* Same photo, blurred, filling the space around the uncropped one so the whole garage shows. */}
+      <Image class="hero__fill" src={jobs[0].src} alt="" aria-hidden="true" widths={[640, 960, 1400]} sizes="(max-width: 900px) 100vw, 55vw" loading="eager" />
       {/* The door in the photo, traced in the photo's own pixels (2496x1580), so it can roll up.
           The photo is perspective-corrected, so the opening and the door are plain, level rectangles. */}
-      <svg class="photo-door" viewBox="0 0 2496 1580" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <svg class="photo-door" viewBox="0 0 2496 1580" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         <defs>
           <clipPath id="door-opening"><rect x="92" y="334" width="1971" height="994" /></clipPath>
           <clipPath id="door-slab"><rect x="86" y="328" width="1983" height="1006" /></clipPath>
